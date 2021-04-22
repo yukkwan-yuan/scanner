@@ -76,7 +76,7 @@ def main():
     max_speed_pub = rospy.Publisher("/navigation_controller/max_speed", Float64, queue_size=10)
     det_pub = rospy.Publisher("/people/num", Int8, queue_size=10)
     modifier = SetMaxSpeed(max_speed_pub, det_pub)
-    sub = rospy.Subscriber("/det3d_result", detection_msgs.msg.Det3DArray, modifier.get_distance_callback)
+    sub = rospy.Subscriber("/scan_person_clustering_node/det3d_result", detection_msgs.msg.Det3DArray, modifier.get_distance_callback)
     rospy.spin()
 
 if __name__ == '__main__':

@@ -143,10 +143,10 @@ ScanImageCombineNode::ScanImageCombineNode(ros::NodeHandle nh, ros::NodeHandle p
     ros::param::param<string>("~caminfo_topic", caminfo_topic, "/camera3/color/camera_info"); 
 
     // ROS publisher & subscriber & message filter
-    pub_combined_image_ = nh_.advertise<sensor_msgs::Image>("debug_reprojection", 1);
-    pub_marker_array_ = nh.advertise<visualization_msgs::MarkerArray>("obj_marker", 1);
-    pub_colored_pc_ = nh.advertise<sensor_msgs::PointCloud2>("colored_pc", 1);
-    pub_detection3d_ = nh.advertise<detection_msgs::Det3DArray>("det3d_result", 1);
+    pub_combined_image_ = nh.advertise<sensor_msgs::Image>("/scan_person_clustering_node/debug_reprojection", 1);
+    pub_marker_array_ = nh.advertise<visualization_msgs::MarkerArray>("/scan_person_clustering_node/obj_marker", 1);
+    pub_colored_pc_ = nh.advertise<sensor_msgs::PointCloud2>("/scan_person_clustering_node/colored_pc", 1);
+    pub_detection3d_ = nh.advertise<detection_msgs::Det3DArray>("/scan_person_clustering_node/det3d_result", 1);
     scan_sub_.subscribe(nh_, scan_topic, 1);
     image_sub_.subscribe(nh_, img_topic, 1);
     sync_.reset(new MySynchronizer(MySyncPolicy(10), image_sub_, scan_sub_));
