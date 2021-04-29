@@ -142,10 +142,10 @@ ScanImageCombineNode::ScanImageCombineNode(ros::NodeHandle nh, ros::NodeHandle p
     ros::param::param<string>("~caminfo_topic", caminfo_topic, "/camera1/color/camera_info"); 
 
     // ROS publisher & subscriber & message filter
-    pub_combined_image_ = nh_.advertise<sensor_msgs::Image>("~debug_reprojection", 1);
-    pub_marker_array_ = nh.advertise<visualization_msgs::MarkerArray>("~obj_marker", 1);
-    pub_colored_pc_ = nh.advertise<sensor_msgs::PointCloud2>("~colored_pc", 1);
-    pub_detection3d_ = nh.advertise<detection_msgs::Det3DArray>("~det3d_result", 1);
+    pub_combined_image_ = nh.advertise<sensor_msgs::Image>("/scan_clustering_node/debug_reprojection", 1);
+    pub_marker_array_ = nh.advertise<visualization_msgs::MarkerArray>("/scan_clustering_node/obj_marker", 1);
+    pub_colored_pc_ = nh.advertise<sensor_msgs::PointCloud2>("/scan_clustering_node/colored_pc", 1);
+    pub_detection3d_ = nh.advertise<detection_msgs::Det3DArray>("/scan_clustering_node/det3d_result", 1);
     scan_sub_.subscribe(nh_, scan_topic, 1);
     image_sub_.subscribe(nh_, img_topic, 1);
     sync_.reset(new MySynchronizer(MySyncPolicy(10), image_sub_, scan_sub_));
@@ -207,8 +207,8 @@ void ScanImageCombineNode::separate_outlier_points(PointCloudXYZPtr cloud_in, Po
     std::vector<pcl::PointIndices> cluster_indices;
     pcl::EuclideanClusterExtraction<pcl::PointXYZ> euler_extractor;
     euler_extractor.setClusterTolerance(0.01); //0.3 //0.035
-    euler_extractor.setMinClusterSize(100); //1
-    euler_extractor.setMaxClusterSize(3000);  // need to check the max pointcloud size of each object {person 5000}
+    euler_extractor.setMinClusterSize(1); //1
+    euler_extractor.setMaxClusterSize(500);  // need to check the max pointcloud size of each object {person 5000}
     euler_extractor.setSearchMethod(tree);
     euler_extractor.setInputCloud(cloud_in);
     euler_extractor.extract(cluster_indices);
@@ -351,7 +351,7 @@ void ScanImageCombineNode::img_scan_cb(const cv_bridge::CvImage::ConstPtr &cv_pt
     {
         if(obj_list[i].cloud->points.size() > 1)
         {
-            cout<<"Object "<<i<<"'s pc size is: "<<obj_list[i].cloud->points.size()<<endl;
+            // cout<<"Object "<<i<<"'s pc size is: "<<obj_list[i].cloud->points.size()<<endl;
             // Clustering and outlier removing
             
             separate_outlier_points(obj_list[i].cloud, obj_list[i].cloud);
@@ -453,7 +453,7 @@ void ScanImageCombineNode::img_scan_cb(const cv_bridge::CvImage::ConstPtr &cv_pt
     {
         sensor_msgs::PointCloud2 colored_cloud_msg;
         pcl::toROSMsg(*cloud_colored, colored_cloud_msg);
-        colored_cloud_msg.header.frame_id = "camera1_color_optical_fix_frame";
+        colored_cloud_msg.header.frame_id = "camera1_color_optical_frame";
         if(count_runtime < 50)
             pub_colored_pc_.publish(colored_cloud_msg);
     }
@@ -485,7 +485,7 @@ void ScanImageCombineNode::img_scan_cb(const cv_bridge::CvImage::ConstPtr &cv_pt
         cout<<"It's depth is : "<<detection_array.dets_list[k].z<<endl<<endl;
     }
     // cout<<"Size : "<<count_runtime<<endl;
-    cout<<"=========================\n";
+    // cout<<"=========================\n";
     // count_runtime++ ;
     // Show object infomation
     // if(obj_list.size() > 0)
