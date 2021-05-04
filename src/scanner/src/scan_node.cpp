@@ -36,7 +36,7 @@ void scan_callback(const sensor_msgs::PointCloud2 cloud_msg)
 
     pcl::CropBox<pcl::PointXYZ> box_filter_;
     box_filter_.setMax(Eigen::Vector4f(3.0, 1.5, 1.0, 1.0));  //3.0, 1.0, 3.0, 1.0
-    box_filter_.setMin(Eigen::Vector4f(-3.0, -1.5, 0.1, 1.0));  //-3.0, -1.2, 0, 1.0
+    box_filter_.setMin(Eigen::Vector4f(-3.0, -1.5, 0.0, 1.0));  //-3.0, -1.2, 0, 1.0
     box_filter_.setKeepOrganized(false);
     box_filter_.setNegative(false);
     box_filter_.setInputCloud(cloud_raw);
@@ -46,7 +46,7 @@ void scan_callback(const sensor_msgs::PointCloud2 cloud_msg)
     pcl::VoxelGrid<pcl::PointXYZ> sor;
     PointCloudXYZPtr cloud_filtered(new PointCloudXYZ);
     sor.setInputCloud (cloud_raw);
-    sor.setLeafSize (0.01f, 0.01f, 0.01f);
+    sor.setLeafSize (0.008f, 0.008f, 0.008f);
     sor.filter (*cloud_filtered);
     //cout << cloud_filtered->points.size()<< endl;
 

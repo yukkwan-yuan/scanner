@@ -70,8 +70,8 @@ static const string COLOR_GREEN = "\e[0;32m";
 static const string COLOR_YELLOW = "\e[0;33m"; 
 static const string COLOR_NC = "\e[0m";
 
-static const int kNumOfInterestClass = 3;
-static const string kInterestClassNames[kNumOfInterestClass] = {"green_milk", "black_milk", "oolong_milk"};
+static const int kNumOfInterestClass = 5;
+static const string kInterestClassNames[kNumOfInterestClass] = {"Soda", "Coke", "PinkSoda", "Lemonade", "MineralWater"};
 
 template <typename T, typename A>
 int arg_max(std::vector<T, A> const& vec) 
@@ -206,9 +206,9 @@ void ScanImageCombineNode::separate_outlier_points(PointCloudXYZPtr cloud_in, Po
     tree->setInputCloud(cloud_in);
     std::vector<pcl::PointIndices> cluster_indices;
     pcl::EuclideanClusterExtraction<pcl::PointXYZ> euler_extractor;
-    euler_extractor.setClusterTolerance(0.01); //0.3 //0.035
+    euler_extractor.setClusterTolerance(0.035); //0.3 //0.035
     euler_extractor.setMinClusterSize(1); //1
-    euler_extractor.setMaxClusterSize(500);  // need to check the max pointcloud size of each object {person 5000}
+    euler_extractor.setMaxClusterSize(5000);  // need to check the max pointcloud size of each object {person 5000}
     euler_extractor.setSearchMethod(tree);
     euler_extractor.setInputCloud(cloud_in);
     euler_extractor.extract(cluster_indices);
@@ -243,7 +243,7 @@ void ScanImageCombineNode::separate_outlier_points(PointCloudXYZPtr cloud_in, Po
     // Remove outlier
     pcl::RadiusOutlierRemoval<pcl::PointXYZ> outrem;
     outrem.setInputCloud(cloud_extracted);
-    outrem.setRadiusSearch(0.01); //0.2 0.035
+    outrem.setRadiusSearch(0.03); //0.2 0.035
     outrem.setMinNeighborsInRadius(2); //2
     outrem.filter(*(cloud_out));
 
@@ -325,7 +325,7 @@ void ScanImageCombineNode::img_scan_cb(const cv_bridge::CvImage::ConstPtr &cv_pt
     // Convert laserscan points to pixel points
     std::vector<cv::Point2d> pts_uv;
     // cout<<"cloud_msg->points.size = "<<cloud_msg->points.size()<<endl;
-    
+ 
     for (int i = 0; i < cloud_msg->points.size(); i++) 
     {
         cv::Point2d pt_uv = point_pointcloud2pixel(cloud_msg->points[i].x, cloud_msg->points[i].y, cloud_msg->points[i].z); 
@@ -337,11 +337,12 @@ void ScanImageCombineNode::img_scan_cb(const cv_bridge::CvImage::ConstPtr &cv_pt
         {
             float diff_x = fabs((float)(pt_uv.x - obj_list[j].box.center.x));
             float diff_y = fabs((float)(pt_uv.y - obj_list[j].box.center.y));
-            if(diff_x < obj_list[j].box.size_x / 4 && diff_y < obj_list[j].box.size_y / 4)
+            if(diff_x < obj_list[j].box.size_x / 4 && diff_y < obj_list[j].box.size_y / 2)
                  obj_list[j].cloud->points.push_back(cloud_msg->points[i]);    
             // Note that the pointcloud would be registered repeatly, so need to filter it later.
         }        
     }
+    
     // cout<<"Point cloud size"<<obj_list[0].cloud->points.size()<<endl;
     // Custom message
     detection_msgs::Det3DArray detection_array;
@@ -351,7 +352,7 @@ void ScanImageCombineNode::img_scan_cb(const cv_bridge::CvImage::ConstPtr &cv_pt
     {
         if(obj_list[i].cloud->points.size() > 1)
         {
-            // cout<<"Object "<<i<<"'s pc size is: "<<obj_list[i].cloud->points.size()<<endl;
+            cout<<"Object "<<i<<"'s pc size is: "<<obj_list[i].cloud->points.size()<<endl;
             // Clustering and outlier removing
             
             separate_outlier_points(obj_list[i].cloud, obj_list[i].cloud);
