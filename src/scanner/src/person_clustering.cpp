@@ -207,7 +207,7 @@ void ScanImageCombineNode::separate_outlier_points(PointCloudXYZPtr cloud_in, Po
     tree->setInputCloud(cloud_in);
     std::vector<pcl::PointIndices> cluster_indices;
     pcl::EuclideanClusterExtraction<pcl::PointXYZ> euler_extractor;
-    euler_extractor.setClusterTolerance(0.3); //0.3 //0.035
+    euler_extractor.setClusterTolerance(0.6); //0.3 //0.035
     euler_extractor.setMinClusterSize(1); //1
     euler_extractor.setMaxClusterSize(10000);  // need to check the max pointcloud size of each object {person 5000}
     euler_extractor.setSearchMethod(tree);
@@ -244,7 +244,7 @@ void ScanImageCombineNode::separate_outlier_points(PointCloudXYZPtr cloud_in, Po
     // Remove outlier
     pcl::RadiusOutlierRemoval<pcl::PointXYZ> outrem;
     outrem.setInputCloud(cloud_extracted);
-    outrem.setRadiusSearch(0.2); //0.2 0.035
+    outrem.setRadiusSearch(0.55); //0.2 0.035
     outrem.setMinNeighborsInRadius(2); //2
     outrem.filter(*(cloud_out));
 
@@ -487,7 +487,6 @@ void ScanImageCombineNode::img_scan_cb(const cv_bridge::CvImage::ConstPtr &cv_pt
         cout<<"It's depth is : "<<detection_array.dets_list[k].z<<endl<<endl;
     }
     // cout<<"Size : "<<count_runtime<<endl;
-    cout<<"\n\n================================================\n\n";
     // count_runtime++ ;
     // Show object infomation
     // if(obj_list.size() > 0)
