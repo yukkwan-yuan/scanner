@@ -337,7 +337,7 @@ void ScanImageCombineNode::img_scan_cb(const cv_bridge::CvImage::ConstPtr &cv_pt
         {
             float diff_x = fabs((float)(pt_uv.x - obj_list[j].box.center.x));
             float diff_y = fabs((float)(pt_uv.y - obj_list[j].box.center.y));
-            if(diff_x < obj_list[j].box.size_x / 4 && diff_y < obj_list[j].box.size_y / 2)
+            if(diff_x < obj_list[j].box.size_x / 4 && diff_y < obj_list[j].box.size_y / 4)
                  obj_list[j].cloud->points.push_back(cloud_msg->points[i]);    
             // Note that the pointcloud would be registered repeatly, so need to filter it later.
         }        

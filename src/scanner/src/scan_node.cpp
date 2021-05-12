@@ -46,7 +46,7 @@ void scan_callback(const sensor_msgs::PointCloud2 cloud_msg)
     pcl::VoxelGrid<pcl::PointXYZ> sor;
     PointCloudXYZPtr cloud_filtered(new PointCloudXYZ);
     sor.setInputCloud (cloud_raw);
-    sor.setLeafSize (0.008f, 0.008f, 0.008f);
+    sor.setLeafSize (0.01f, 0.01f, 0.01f);
     sor.filter (*cloud_filtered);
     //cout << cloud_filtered->points.size()<< endl;
 
