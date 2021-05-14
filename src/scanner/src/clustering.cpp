@@ -206,7 +206,7 @@ void ScanImageCombineNode::separate_outlier_points(PointCloudXYZPtr cloud_in, Po
     tree->setInputCloud(cloud_in);
     std::vector<pcl::PointIndices> cluster_indices;
     pcl::EuclideanClusterExtraction<pcl::PointXYZ> euler_extractor;
-    euler_extractor.setClusterTolerance(0.035); //0.3 //0.035
+    euler_extractor.setClusterTolerance(0.02); //0.3 //0.035
     euler_extractor.setMinClusterSize(1); //1
     euler_extractor.setMaxClusterSize(5000);  // need to check the max pointcloud size of each object {person 5000}
     euler_extractor.setSearchMethod(tree);
@@ -243,7 +243,7 @@ void ScanImageCombineNode::separate_outlier_points(PointCloudXYZPtr cloud_in, Po
     // Remove outlier
     pcl::RadiusOutlierRemoval<pcl::PointXYZ> outrem;
     outrem.setInputCloud(cloud_extracted);
-    outrem.setRadiusSearch(0.03); //0.2 0.035
+    outrem.setRadiusSearch(0.02); //0.2 0.035
     outrem.setMinNeighborsInRadius(2); //2
     outrem.filter(*(cloud_out));
 
