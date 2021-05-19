@@ -154,7 +154,7 @@ if __name__ == '__main__':
     # cfgfile = os.path.join(os.path.dirname(__file__), "./cfg/yolov4-tiny.cfg")
     # weightfile = os.path.join(os.path.dirname(__file__), "./weights/milktea/yolov4-tiny-obj_6000.weights")
     # cfgfile = os.path.join(os.path.dirname(__file__), "./cfg/yolov4-tiny-obj.cfg")
-    weightfile = os.path.join(os.path.dirname(__file__), "./weights/yolo-obj_10000.weights")
+    weightfile = os.path.join(os.path.dirname(__file__), "./weights/yolov4-bottle_10000.weights")
     cfgfile = os.path.join(os.path.dirname(__file__), "./cfg/yolo-obj.cfg")
 
     rospy.init_node('DetectedImgNode', anonymous=False)       
