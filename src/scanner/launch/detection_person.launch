@@ -5,10 +5,16 @@
     </include>
 
     <!-- 開啟點雲濾波器 -->
-    <node name="scan_person_filter_node" pkg="scanner" type="scan_person_filter_node" required="true" output="screen" />
+    <node name="scan_person_front_filter_node" pkg="scanner" type="scan_person_front_filter_node" required="true" output="screen" />
+
+    <!-- 開啟點雲濾波器 -->
+    <node name="scan_person_back_filter_node" pkg="scanner" type="scan_person_back_filter_node" required="true" output="screen" />
 
     <!-- 開啟點雲分群器已取得深度資訊 -->
-    <node name="scan_person_clustering_node" pkg="scanner" type="scan_person_clustering_node" required="true" output="screen"/>
+    <node name="scan_person_clustering_front_node" pkg="scanner" type="scan_person_clustering_front_node" required="true" output="screen"/>
+
+    <!-- 開啟點雲分群器已取得深度資訊 -->
+    <node name="scan_person_clustering_back_node" pkg="scanner" type="scan_person_clustering_back_node" required="true" output="screen"/>
 
     <!-- 開啟2D_guassian -->
     <node pkg="scanner" name="Setting_Max_Speed" type="2D_gaussian.py" output="screen" required="true"/>

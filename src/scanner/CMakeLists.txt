@@ -156,8 +156,14 @@ target_link_libraries(scan_filter_node
   ${PCL_LIBRARIES} 
 )
 
-add_executable(scan_person_filter_node src/scan_person_node.cpp)
-target_link_libraries(scan_person_filter_node 
+add_executable(scan_person_front_filter_node src/scan_person_front_node.cpp)
+target_link_libraries(scan_person_front_filter_node 
+  ${catkin_LIBRARIES}
+  ${PCL_LIBRARIES} 
+)
+
+add_executable(scan_person_back_filter_node src/scan_person_back_node.cpp)
+target_link_libraries(scan_person_back_filter_node 
   ${catkin_LIBRARIES}
   ${PCL_LIBRARIES} 
 )
@@ -176,8 +182,17 @@ target_link_libraries(scan_clustering_node
   ${Boost_SYSTEM_LIBRARY}
 )
 
-add_executable(scan_person_clustering_node src/person_clustering.cpp)
-target_link_libraries(scan_person_clustering_node
+add_executable(scan_person_clustering_front_node src/person_clustering_front.cpp)
+target_link_libraries(scan_person_clustering_front_node
+  ${catkin_LIBRARIES}
+  ${OpenCV_LIBRARIES}
+  ${EIGEN3_LIBRARIES}
+  ${PCL_LIBRARIES} 
+  ${Boost_SYSTEM_LIBRARY}
+)
+
+add_executable(scan_person_clustering_back_node src/person_clustering_back.cpp)
+target_link_libraries(scan_person_clustering_back_node
   ${catkin_LIBRARIES}
   ${OpenCV_LIBRARIES}
   ${EIGEN3_LIBRARIES}
