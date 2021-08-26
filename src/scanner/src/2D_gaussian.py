@@ -14,6 +14,9 @@ from mpl_toolkits.mplot3d import Axes3D
 mod_var = 1.0
 min = 100.0
 prev_min = 100.0
+passby = 0
+add_var = 0.01
+counter = 0
 
 class SetMaxSpeed:
     def __init__(self, max_speed_pub, det_pub, distance_pub, modify_var_pub):
@@ -59,16 +62,23 @@ class SetMaxSpeed:
         # plt.show()
 
         global mod_var
-        if 1.0 - Z[29+dx, 29+dy] / Z[29, 29] < 0.999 :
-            if mod_var - (1.0 - Z[29+dx, 29+dy] / Z[29, 29]) > 0.05 :
-                mod_var = 1.0 - Z[29+dx, 29+dy] / Z[29, 29] + 0.02
+        global passby
+        global add_var
+
+        if passby == 0:
+            if 1.0 - Z[29+dx, 29+dy] / Z[29, 29] < 0.99 :
+                if mod_var - (1.0 - Z[29+dx, 29+dy] / Z[29, 29]) > 0.033 :
+                    mod_var = 1.0 - Z[29+dx, 29+dy] / Z[29, 29] + 0.02
+                else :
+                    mod_var = 1.0 - Z[29+dx, 29+dy] / Z[29, 29]
             else :
-                mod_var = 1.0 - Z[29+dx, 29+dy] / Z[29, 29]
-        else :
-            if mod_var > 0.4 :
-                mod_var = mod_var - 0.01
-            else :
-                mod_var = mod_var - 0.02
+                if mod_var == 1.0:
+                    mod_var = 1.0
+                elif mod_var > 0.04:
+                    mod_var = mod_var - 0.04
+
+        if passby == 1 and mod_var <= 1.0:
+            mod_var = mod_var + add_var/12
 
         final_max_speed = mod_var * MAX_SPEED
         # rospy.logwarn("modify velocity to %lf", final_max_speed)
@@ -78,6 +88,9 @@ class SetMaxSpeed:
     def get_distance_callback(self, msg):
         global min
         global prev_min
+        global passby
+        global add_var
+        global counter
         target = -1
         
         if len(msg.dets_list) != 0 :
@@ -88,17 +101,28 @@ class SetMaxSpeed:
         if target != -1 :
             if min > prev_min :
                 min = min - 0.05
-            if min < 2.25 :
-                self.social_speed(30, 30, 0.0)
-            else :
-                self.social_speed(int(msg.dets_list[target].x/0.2), int(msg.dets_list[target].y/0.2), 0.4)
+            
+            self.social_speed(int(msg.dets_list[target].x/0.2), int(msg.dets_list[target].y/0.2), 0.4)
         else :
-            if min == prev_min and min > 0.3:
+            if min == prev_min and min > 0.5 and passby == 0:
                 min = min - 0.2
-            if min < 2.25 :
-                self.social_speed(30, 30, 0.0)
-            else :
-                self.social_speed(30, 30, 0.4)
+
+            if min <= 0.5:
+                passby = 1
+
+            self.social_speed(30, 30, 0.4)
+
+        if passby == 1 and min < 40:
+            min = min + add_var
+
+            if counter/3 == 0: 
+                add_var = add_var + 0.06
+            elif counter/3 == 1:
+                add_var = add_var + 0.07
+            else:
+                add_var = add_var + 0.03
+
+            counter = counter + 1
 
         self.det_pub.publish(len(msg.dets_list))   
         self.distance_pub.publish(sqrt(min))
