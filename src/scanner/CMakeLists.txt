@@ -167,6 +167,7 @@ target_link_libraries(scan_person_back_filter_node
   ${catkin_LIBRARIES}
   ${PCL_LIBRARIES} 
 )
+add_dependencies(scan_person_back_filter_node detection_msgs_generate_messages_cpp)
 
 #add_executable(pointcloud2xyz src/pointcloud2xyz.cpp)
 #target_link_libraries(pointcloud2xyz 
@@ -181,6 +182,7 @@ target_link_libraries(scan_clustering_node
   ${PCL_LIBRARIES} 
   ${Boost_SYSTEM_LIBRARY}
 )
+add_dependencies(scan_clustering_node detection_msgs_generate_messages_cpp)
 
 add_executable(scan_person_clustering_front_node src/person_clustering_front.cpp)
 target_link_libraries(scan_person_clustering_front_node
@@ -190,6 +192,7 @@ target_link_libraries(scan_person_clustering_front_node
   ${PCL_LIBRARIES} 
   ${Boost_SYSTEM_LIBRARY}
 )
+add_dependencies(scan_person_clustering_front_node detection_msgs_generate_messages_cpp)
 
 add_executable(scan_person_clustering_back_node src/person_clustering_back.cpp)
 target_link_libraries(scan_person_clustering_back_node
@@ -199,6 +202,7 @@ target_link_libraries(scan_person_clustering_back_node
   ${PCL_LIBRARIES} 
   ${Boost_SYSTEM_LIBRARY}
 )
+add_dependencies(scan_person_clustering_back_node detection_msgs_generate_messages_cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
