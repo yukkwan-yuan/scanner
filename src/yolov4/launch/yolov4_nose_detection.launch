@@ -1,0 +1,6 @@
+<launch>
+
+    <!-- 開啟python檔案 -->
+    <node pkg="yolov4" name="DetectedNoseImgNode" type="demo_nose_detection.py" output="screen" required="true"/>
+
+</launch>
