@@ -1,0 +1,14 @@
+<launch>
+
+    <!-- 開啟yolov4 -->
+    <include file="$(find yolov4)/launch/yolov4_nose_detection.launch">
+    </include>
+
+    <!-- 開啟點雲濾波器 -->
+    <node name="scan_nose_filter_node" pkg="scanner" type="scan_nose_filter_node" required="true" output="screen" />
+
+
+    <!-- 開啟點雲分群器已取得深度資訊 -->
+    <node name="scan_nose_clustering_node" pkg="scanner" type="scan_nose_clustering_node" required="true" output="screen"/>
+
+</launch>
