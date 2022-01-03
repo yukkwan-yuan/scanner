@@ -204,6 +204,28 @@ target_link_libraries(scan_person_clustering_back_node
 )
 add_dependencies(scan_person_clustering_back_node detection_msgs_generate_messages_cpp)
 
+
+# yyk test
+
+add_executable(scan_nose_clustering_node src/scan_nose_clustering_node.cpp)
+target_link_libraries(scan_nose_clustering_node
+  ${catkin_LIBRARIES}
+  ${OpenCV_LIBRARIES}
+  ${EIGEN3_LIBRARIES}
+  ${PCL_LIBRARIES} 
+  ${Boost_SYSTEM_LIBRARY}
+)
+add_dependencies(scan_nose_clustering_node detection_msgs_generate_messages_cpp)
+
+
+add_executable(scan_nose_filter_node src/scan_nose_filter_node.cpp)
+target_link_libraries(scan_nose_filter_node
+  ${catkin_LIBRARIES}
+  ${PCL_LIBRARIES} 
+)
+add_dependencies(scan_nose_filter_node detection_msgs_generate_messages_cpp)
+
+
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use

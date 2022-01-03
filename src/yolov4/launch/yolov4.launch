@@ -1,6 +1,0 @@
-<launch>
-
-    <!-- 開啟python檔案 -->
-    <node pkg="yolov4" name="DetectedImgNode" type="demo.py" output="screen" required="true"/>
-
-</launch>
